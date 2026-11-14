@@ -1,0 +1,55 @@
+{
+  "logo": "assets/logo/ALICE-logo.png",
+  "layout": {
+    "corner": "bottom-left",
+    "margin_px": 54,
+    "padding_px": 18,
+    "gap_px": 16,
+    "line_gap_px": 8,
+    "logo_width_px": 250,
+    "panel_radius_px": 16
+  },
+  "fonts": {
+    "family": "Computer Modern",
+    "family_bold": "Computer Modern",
+    "title_size": 42,
+    "body_size": 45,
+    "small_size": 30,
+    "math_fontset": "cm"
+  },
+  "style": {
+    "text_color": "#ffffff",
+    "accent_color": "#ff3b3b",
+    "panel_color": [
+      0,
+      0,
+      0,
+      96
+    ],
+    "shadow_color": [
+      0,
+      0,
+      0,
+      170
+    ],
+    "shadow_offset_px": 2,
+    "line_color": [
+      255,
+      255,
+      255,
+      90
+    ],
+    "line_width_px": 3
+  },
+  "metadata": {
+    "run_number": "544122",
+    "period": "LHC23zzh",
+    "system": "Pb$-$Pb",
+    "energy": "\\sqrt{s_{\\rm NN}} = 5.36~\\mathrm{TeV}",
+    "time_zone": "UTC",
+    "timestamp_key": "candidate_timestampMs",
+    "timestamp_candidates": [
+      "candidate_timestampMs"
+    ]
+  }
+}

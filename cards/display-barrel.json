@@ -1,0 +1,33 @@
+{
+  "extends": "display-quality.json",
+  "camera": {
+    "center_mode": "barrel",
+    "azimuth": 100,
+    "elevation": 18,
+    "zoom": 1.7
+  },
+  "geometry": {
+    "exclude": [
+      "L3_MAGNET",
+      "DIPOLE_COIL",
+      "FRONT_ABSORBER",
+      "MUON_FILTER",
+      "BEAM_SHIELD",
+      "MCH",
+      "MID"
+    ]
+  },
+  "cutout": {
+    "phi_width": 110
+  },
+  "styles": {
+    "TRACK_BARREL": {
+      "thickness": 0.008,
+      "glow": 1.18
+    },
+    "TPC_SPOTLIGHT": {
+      "energy": 420.0,
+      "z_offset": 0.25
+    }
+  }
+}

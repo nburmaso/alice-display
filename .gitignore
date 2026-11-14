@@ -1,0 +1,28 @@
+# Local AO2D inputs and generated candidates
+data/
+events/
+
+# Render outputs and Blender projects
+renders/
+*.blend
+*.blend1
+*.blend2
+
+# Python build and virtual environment files
+__pycache__/
+*.py[cod]
+.venv/
+
+# ROOT compilation artifacts
+*_C.so
+*_C.d
+*_C_ACLiC_dict_rdict.pcm
+*_C_ACLiC_dict.cxx
+*.rootmap
+
+# OS and editor state
+.DS_Store
+*~
+
+# Custom exported geometry
+work/
