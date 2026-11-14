@@ -123,7 +123,7 @@ blender -b --python render.py -- \
   --save-blend renders/display.blend
 ```
 
-**The JSON display cardsconfigure geometry colors, transparency, solidification (additional thickness for thin sensitive elements), cutout, lighting, track styling, camera, resolution, and samples. Edit a card or supply CLI overrides to change individual settings**
+**The JSON display cards configure geometry colors, transparency, solidification (additional thickness for thin sensitive elements), cutout, lighting, track styling, camera, resolution, and samples. Edit a card or supply CLI overrides to change individual settings**
 
 ### 6. Add the ALICE branding
 
