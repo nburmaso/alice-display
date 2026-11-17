@@ -78,13 +78,13 @@ DEFAULT_CAMERA_BARREL_GROUPS = (
     'EMCAL_CELLS', 'DCAL_CELLS',
 )
 
-# Light positions and sizes are relative to the framing radius
+# Light positions and sizes are relative to the scene or target detector group
 LIGHTING = {
     'world': {'color': (0.0, 0.0, 0.0), 'strength': 0.16},
-    'key':     {'position': (0.55, -1.15, 1.20), 'energy_per_radius': 720, 'diameter_per_radius': 1.35},
-    'fill':    {'position': (-1.10, 0.95, 0.72), 'energy_per_radius': 280, 'diameter_per_radius': 1.85},
-    'rim':     {'position': (-0.15, -1.40, 1.55), 'energy_per_radius': 420, 'diameter_per_radius': 1.05},
-    'forward': {'position': (1.65, 0.50, 0.28), 'energy_per_radius': 260, 'diameter_per_radius': 1.80},
+    'key':       {'position': (0.55, -1.15, 1.20), 'energy_per_radius': 720, 'diameter_per_radius': 1.35},
+    'fill':      {'position': (-1.10, 0.95, 0.72), 'energy_per_radius': 280, 'diameter_per_radius': 1.85},
+    'rim':       {'position': (-0.15, -1.40, 1.55), 'energy_per_radius': 420, 'diameter_per_radius': 1.05},
+    'forward':   {'position': (1.65, 0.50, 0.28), 'energy_per_radius': 260, 'diameter_per_radius': 1.80},
 }
 
 
@@ -302,10 +302,22 @@ def make_material(group, alpha_mode, alpha_overrides):
     bsdf.inputs['Alpha'].default_value = alpha
     bsdf.inputs['Metallic'].default_value = style.get('metallic', 0.08)
     bsdf.inputs['Roughness'].default_value = style.get('roughness', 0.46)
-    if hasattr(bsdf.inputs, 'Specular IOR Level'):
+    if 'Specular IOR Level' in bsdf.inputs:
         bsdf.inputs['Specular IOR Level'].default_value = style.get('specular', 0.32)
     elif 'Specular' in bsdf.inputs:
         bsdf.inputs['Specular'].default_value = style.get('specular', 0.32)
+
+    emission_color = style.get('emission')
+    emission_strength = style.get('emission_strength', 0.0)
+    if emission_color is not None and emission_strength > 0.0:
+        emission_value = (emission_color[0], emission_color[1], emission_color[2], 1.0)
+        if 'Emission Color' in bsdf.inputs:
+            bsdf.inputs['Emission Color'].default_value = emission_value
+        elif 'Emission' in bsdf.inputs:
+            bsdf.inputs['Emission'].default_value = emission_value
+        if 'Emission Strength' in bsdf.inputs:
+            bsdf.inputs['Emission Strength'].default_value = emission_strength
+
     if hasattr(mat, 'blend_method'):
         mat.blend_method = ('OPAQUE' if alpha >= 1 else alpha_mode)
     if hasattr(mat, 'shadow_method') and alpha < 1.0 and alpha_mode == 'BLEND':
@@ -711,11 +723,24 @@ def main():
         data.ortho_scale = 8.0 / args.camera_zoom
         scene.camera = camera
 
-    for key in ('key', 'fill', 'rim', 'forward'):
-        light = LIGHTING.get(key, {})
-        if light.get('energy_per_radius', 0) > 0:
-            make_light('Area_' + key, center + radius * Vector(light['position']), center,
-                       light['energy_per_radius'] * radius, light['diameter_per_radius'] * radius)
+    for key, light in LIGHTING.items():
+        if key == 'world' or light.get('energy_per_radius', 0) <= 0:
+            continue
+        target, scale = center, radius
+        group = light.get('target_group')
+        if group:
+            objects = geometry_by_group.get(group.upper(), [])
+            if not objects:
+                print(f'Light {key}: no geometry for {group}')
+                continue
+            corners = [obj.matrix_world @ Vector(corner) for obj in objects for corner in obj.bound_box]
+            lower = Vector([min(point[i] for point in corners) for i in range(3)])
+            upper = Vector([max(point[i] for point in corners) for i in range(3)])
+            target, scale = (lower + upper) * 0.5, max((upper - lower).length * 0.5, 1.0)
+        position = target + scale * Vector(light['position'])
+        make_light('Area_' + key, position, target,
+                   light['energy_per_radius'] * scale, light['diameter_per_radius'] * scale)
+        print(f'Light {key}: target={tuple(round(x, 2) for x in target)}, scale={scale:.2f} m')
     add_tpc_spotlight(args)
     if args.tracks_npz:
         add_event_tracks(args.tracks_npz, scene, args.track_bevel_resolution)
