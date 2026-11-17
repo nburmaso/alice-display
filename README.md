@@ -146,16 +146,17 @@ The overlay supports Computer Modern fonts, Matplotlib MathText, font-size setti
 ## Repository layout
 
 ```text
-export_geometry.C       Aligned CCDB geometry → OBJ
-export_event.C          AO2D candidate selection → ROOT trajectories
-tree_to_npz.py          ROOT trajectories → Blender NPZ
-render.py               OBJ + NPZ → rendered PNG
-postprocess_overlay.py  Rendered PNG + metadata → branded PNG
-cards/                  Selection, display, and overlay configurations
-assets/geo/obj/         Ready-to-use detector geometry
-assets/logo/            ALICE logo
-examples/events/        Five ROOT/NPZ candidate examples
-examples/displays/      Example rendered images
+export_geometry.C            Aligned CCDB geometry → OBJ
+export_event.C               AO2D candidate selection → ROOT trajectories
+tree_to_npz.py               ROOT trajectories → Blender NPZ
+render.py                    OBJ + NPZ → rendered PNG
+postprocess_overlay.py       Rendered PNG + metadata → branded PNG
+cards/                       Selection, display, and overlay configurations
+assets/geo/obj/              Ready-to-use detector geometry
+assets/logo/                 ALICE logo
+examples/events/             "INEL" ROOT/NPZ candidate examples
+examples/events-fwd-dimuons/ "Dimuon" ROOT/NPZ candidate examples
+examples/displays/           Example rendered images
 ```
 
 ## References and attribution
